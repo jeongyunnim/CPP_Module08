@@ -1,7 +1,18 @@
 #include "Span.hpp"
 
+const char* Span::OutOfRangeException::what(void) const throw()
+{
+	return ("Out of range error.");
+}
+
+const char* Span::InsufficientElementException::what(void) const throw()
+{
+	return ("Element");
+}
+
 Span::Span(unsigned int N)
-	:	_vector(std::vector<int>(N))
+	:	_vector(std::vector<int>(0))
+	,	_size(N)
 {}
 
 Span::~Span(void)
@@ -9,47 +20,52 @@ Span::~Span(void)
 
 Span& Span::operator=(const Span& rhs)
 {
-	_vector = std::vector<int>(rhs._vector.capacity());
-	for (int i = 0; i < rhs._vector.size(); i++)
-		_vector[i] = rhs._vector[i];
+	_size = rhs._size;
+	_vector = std::vector<int>(rhs._vector);
+	return (*this);
 }
 
 Span::Span(const Span& obj)
-	:	_vector(std::vector<int>(obj._vector.capacity()))
+	:	_vector(std::vector<int>(obj._vector))
+	,	_size(obj._size)
 {}
-
 
 void	Span::addNumber(int num)
 {
-	if (_vector.capacity() == _vector.size()) // size인지 size - 1인지 보아야 함.
-		throw (std::exception()); // exception 정의하기.
+	if (_vector.size() >= _size)
+		throw (OutOfRangeException());
 	_vector.push_back(num);
 }
 
-void	Span::fillVector(size_t range, std::vector<int>::iterator begin, std::vector<int>::iterator end)
+void	Span::fillVector(const std::vector<int>& target)
 {
-	if (_vector.capacity() == _vector.size() + range)
-		throw (std::exception()); // exception 정의하기.
-	_vector.insert(_vector.begin() + _vector.size(), begin, end);
+	if (_vector.size() + target.size() > _size)
+		throw (OutOfRangeException());
+	_vector.reserve(_vector.size() + target.size());
+	_vector.insert(_vector.end(), target.begin(), target.end());
+
 }
 
-int	Span::shortSpan(void)
+int	Span::shortestSpan(void)
 {
 	if (_vector.size() < 2)
-		throw (std::exception());
-	std::vector temp(_vector);
-	int	gap = temp[1] - temp[0];
+		throw (InsufficientElementException());
+	std::vector<int> temp(_vector);
 	std::sort(temp.begin(), temp.end());
-	for (int i = 1; i < _vector.size(); i++)
+	int	gap = temp[1] - temp[0];
+	for (size_t i = 1; i < _vector.size(); i++)
 	{
 		if (gap > temp[i] - temp[i - 1])
 			gap = temp[i] - temp[i - 1];
 	}
+	return (gap);
 }
 
 int	Span::longestSpan(void)
 {
 	if (_vector.size() < 2)
-		throw (std::exception()); // exception 정의하기.
-	return (std::max_element(_vector.begin(), _vector.end()) - std::min_element(_vector.begin(), _vector.end()));
+		throw (InsufficientElementException());
+
+	return (*std::max_element(_vector.begin(), _vector.end()) - \
+			*std::min_element(_vector.begin(), _vector.end()));
 }

@@ -1,13 +1,14 @@
-NAME 		=	ex00
+NAME 		=	ex01
 
 CXX 		=	c++
 CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98
 
-INCS		=	./easyfind.hpp\
+INCS		=	./span.hpp\
 				../Colors.hpp\
 				
 SRCS		=	./main.cpp\
-				../Colors.cpp
+				./Span.cpp\
+				../Colors.cpp\
 
 OBJS		=	$(SRCS:%.cpp=%.o)
 
