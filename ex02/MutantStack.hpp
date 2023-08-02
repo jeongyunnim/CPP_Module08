@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <stack>
 #include <iostream>
+#include <iomanip>
+#include "../Colors.hpp"
 
 template <typename T>
 class MutantStack : public std::stack<T>
@@ -20,43 +22,49 @@ public:
 	{
 		if (this == &rhs)
 			return (*this);
-		c = rhs.c;
+		std::stack<T>::c = rhs.c;
 		return (*this);
 	}
 
-	typename std::stack<T>::_container<T>::iterator begin(void)
+	typedef typename std::stack<T>::container_type::iterator iterator;
+	iterator begin(void)
 	{
-		return (c.begin());
+		return (std::stack<T>::c.begin());
 	}
-	typename std::stack<T>::_container<T>::iterator end(void)
+	iterator end(void)
 	{
-		return (c.end());
+		return (std::stack<T>::c.end());
 	}
-	typename std::stack<T>::_container<T>::const_iterator begin(void)
+	
+	typedef typename std::stack<T>::container_type::const_iterator const_iterator;
+	const_iterator cbegin(void) const
 	{
-		return (c.begin());
+		return (std::stack<T>::c.begin());
 	}
-	typename std::stack<T>::_container<T>::const_iterator end(void)
+	const_iterator cend(void) const
 	{
-		return (c.end());
+		return (std::stack<T>::c.end());
 	}
-	typename std::stack<T>::_container<T>::reverse_iterator rbegin(void)
+	
+	typedef typename std::stack<T>::container_type::reverse_iterator reverse_iterator;
+	reverse_iterator rbegin(void)
 	{
-		return (c.rbegin());
+		return (std::stack<T>::c.rbegin());
 	}
-	typename std::stack<T>::_container<T>::reverse_iterator rend(void)
+	reverse_iterator rend(void)
 	{
-		return (c.rend());
+		return (std::stack<T>::c.rend());
 	}
-	typename std::stack<T>::_container<T>::const_reverse_iterator rbegin(void)
+	
+	typedef typename std::stack<T>::container_type::const_reverse_iterator const_reverse_iterator;
+	const_reverse_iterator crbegin(void) const
 	{
-		return (c.rbegin());
+		return (std::stack<T>::c.rbegin());
 	}
-	typename std::stack<T>::_container<T>::const_reverse_iterator rend(void)
+	const_reverse_iterator crend(void) const
 	{
-		return (c.rend());
+		return (std::stack<T>::c.rend());
 	}
-
 };
 
 #endif
